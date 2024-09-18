@@ -2,4 +2,9 @@
 
 2) En évitant les mots déjà rencontrés, on a 20333 mots.
 
-3) 
+3)
+Found war 298 times.
+Found peace 114 times.
+Word 'toto' not found.
+
+4) 
