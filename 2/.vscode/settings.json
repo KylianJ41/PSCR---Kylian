@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "ostream": "cpp",
+        "iosfwd": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
+}

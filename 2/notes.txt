@@ -1,0 +1,5 @@
+1) Il y a 566193 mots dans War and Peace
+
+2) En évitant les mots déjà rencontrés, on a 20333 mots.
+
+3) 
