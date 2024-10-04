@@ -1,0 +1,15 @@
+
+
+2)
+
+op *
+
+Comme le contenu de la classe vector n'est qu'un pointeur sur une var de type T, l'op *it va retourne une ref à l'élément de type T auquel le pointeur it fait ref. Ca correspnd donc aux attentes
+
+op ++
+
+va avancer le pointeur au prochain element, conforme
+
+op !=
+
+va vérifier si les deux addresses sont pareil, conforme
