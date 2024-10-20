@@ -3,6 +3,9 @@
 #include <vector>
 #include <chrono>
 #include "Queue.h"
+#include "Job.h"
+#include "Barrier.h"
+#include "Pool.h"
 
 void producer(pr::Queue<int> &q, int id, int num_elems)
 {
@@ -30,7 +33,7 @@ void consumer(pr::Queue<int> &q, int id)
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
-
+/* MAIN JUSQU'A Q 9 INCLU
 int main()
 {
     pr::Queue<int> q(10);
@@ -57,6 +60,49 @@ int main()
         t.join();
 
     std::cout << "All threads finished" << std::endl;
+}
+*/
+/*
+int main()
+{
+    int res = 0;
+
+    pr::SleepJob *job = new pr::SleepJob(42, &res);
+
+    job->run();
+
+    delete job;
+
+    std::cout << "Deleted job, result is = " << res << std::endl;
+}
+*/
+
+int main()
+{
+    const int K = 4;  // nb threads ds pool
+    const int N = 10; // nb jobs a soumettre
+
+    pr::Pool pool(20);
+    pool.start(K);
+
+    pr::Barrier barrier(N);
+    std::vector<int> res(N);
+
+    for (int i = 0; i < N; ++i)
+    {
+        pr::Job *job = new pr::SleepJob(i, &res[i], barrier);
+        pool.submit(job);
+    }
+
+    // On attend que tous les jobs soient terminés
+    barrier.waitFor();
+    // Puis une fois sûr qu'il soit terminés, on peut join les threads
+    // et nettoyer le pool.
+    pool.stop();
+
+    std::cout << "Results:" << std::endl;
+    for (int i = 0; i < N; ++i)
+        std::cout << "Job " << i << " result: " << res[i] << std::endl;
 }
 
 /*
