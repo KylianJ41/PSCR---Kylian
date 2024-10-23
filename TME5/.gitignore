@@ -1,0 +1,13 @@
+/Makefile
+/compile
+/config.log
+/config.status
+/configure
+/depcomp
+/install-sh
+/missing
+/toto.ppm
+/Debug/
+/autom4te.cache/
+/Makefile.in
+/aclocal.m4
