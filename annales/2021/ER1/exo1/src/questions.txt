@@ -1,0 +1,39 @@
+> Expliquez pourquoi si on vient de tester que la file n'est pas pleine dans un producteur
+> qui fait put et qu'on se fait ``doubler'' par un consommateur qui vient modifier $count$,
+> le comportement du producteur va rester correct. 
+
+Parce que si il y avait de la place pour un put avant que le consommateur consomme,
+il y en aura aussi après qu'il ait consomme. Dans les fait, il y en 
+aura meme plus.
+
+Enfin si on parle bien du scénario : P test si not full et recoit true,
+C consomme après que P reçoit le true,
+puis P va réaliser son put et ajouter un elem dans la queue.
+
+
+> Expliquez ce qui va se produire dans le scenario suivant, deux consommateurs C1 et C2
+> tentent de chacun de consommer un message sur une file vide, ensuite on passe la main
+> à un producteur P qui parvient à insérer trois éléments dans la queue d'affilée.
+> Expliquer comment vont se passer les notifications dans ce scenario sachant que l'on utilise
+> $notify\_one()$ pour toutes les notifications.
+
+
+=> C1 et C2 attendent.
+
+=> P call put, passe le test not_full, enqueue un node, fait count++
+puis va envoyer une notification sur not_empty. Un thread parmi ceux
+qui attendent sur not_empty va se reveille (hasard), supossons ici C1.
+
+=> Alors, C1 va sortir du wait, et va pouvoir procéder au dequeue et
+lui aussi envoyer une notif, cette fois-ci sur not_full.
+
+=> EN MEME TEMPS, c'est à dire que nous ne savons pas qui va finir en premier,
+P va reprocedé à un put, puis envoyer une notification sur not_empty.
+
+=> Les notifications envoyé sur not_full n'auront aucun effet car personne 
+n'est endormi sur not_full. (on suppose la queue suffisament grande)
+
+=> Comme on ne sait pas si C1 a fini son take avant que P est fini
+son 2eme put, on ne peut savoir si quand P aura fini son 2eme put,
+C1 sera entrain de dormir à nouveau ou non. Nous ne pouvons donc avec certitude
+savoir si C1 ou C2 sera reveillé quand la 2eme notif de P arrivera. 
